@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPEF Pro - Reporte Ilustrado</title>
+    <title>EPEF Pro - Reporte Clínico Ilustrado</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --primary: #2c3e50; --accent: #27ae60; --bg: #f4f7f6; --white: #ffffff;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--primary); padding: 20px; }
-        .container { background: var(--white); max-width: 700px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--primary); padding: 10px; }
+        .container { background: var(--white); max-width: 800px; margin: auto; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
         header { text-align: center; border-bottom: 3px solid var(--accent); margin-bottom: 20px; padding-bottom: 10px;}
         .form-group { margin-bottom: 12px; text-align: left; }
@@ -22,44 +22,41 @@
         .btn-calc { background: var(--accent); color: white; font-size: 1.1rem; }
         .btn-pdf { background: var(--primary); color: white; display: none; }
         
-        /* Diseño del Resultado y PDF */
-        #resultado { margin-top: 25px; padding: 25px; border-radius: 10px; display: none; background: #fff; border: 1px solid #eee; }
-        .score-header { text-align: center; padding: 15px; border-radius: 8px; color: white; margin-bottom: 20px; }
+        #resultado { margin-top: 25px; padding: 20px; border-radius: 10px; display: none; background: #fff; border: 1px solid #eee; }
+        .score-header { text-align: center; padding: 15px; border-radius: 8px; color: white; margin-bottom: 15px; }
         .score-val { font-size: 2rem; font-weight: 800; display: block; }
         
-        .section-title { border-bottom: 2px solid #eee; margin: 20px 0 10px; padding-bottom: 5px; color: var(--primary); font-size: 1.1rem; text-transform: uppercase; }
+        .section-title { border-bottom: 2px solid #eee; margin: 15px 0 8px; padding-bottom: 5px; color: var(--primary); font-size: 1rem; text-transform: uppercase; font-weight: bold; }
         
-        /* Contenedor de Ejercicios Ilustrados */
-        .ejercicios-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .ejercicio-item { border: 1px solid #eee; padding: 10px; border-radius: 8px; text-align: center; background: #fafafa; }
-        .ejercicio-img { width: 80px; height: 80px; margin-bottom: 10px; opacity: 0.8; }
-        .ejercicio-name { font-weight: bold; font-size: 0.9rem; display: block; margin-bottom: 5px; }
-        .ejercicio-desc { font-size: 0.75rem; color: #666; }
-
-        @media print {
-            .btn-group, #form-area { display: none; }
-        }
+        .ejercicios-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .ejercicio-item { border: 1px solid #eee; padding: 12px; border-radius: 8px; text-align: center; background: #fafafa; }
+        .ejercicio-img { width: 60px; height: 60px; margin-bottom: 8px; }
+        
+        /* Estilo para las instrucciones del paciente */
+        .instrucciones-box { background: #eef2f7; padding: 15px; border-radius: 8px; font-size: 0.85rem; margin-top: 15px; border-left: 5px solid var(--primary); }
+        .instrucciones-box h4 { margin: 0 0 10px 0; color: var(--primary); }
+        .instrucciones-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container" id="reporte-final">
     <header>
-        <h2>Sistema EPEF Pro</h2>
-        <p style="color: #7f8c8d; margin:0;">Prescripción Médica de Ejercicio Físico</p>
+        <h2 style="margin:0;">Sistema EPEF Pro</h2>
+        <p style="color: #7f8c8d; margin:0; font-size: 0.9rem;">Estratificación y Prescripción del Ejercicio Físico</p>
     </header>
     
     <div id="form-area">
         <div class="form-group">
             <label>Nombre del Paciente</label>
-            <input type="text" id="paciente" placeholder="Nombre completo">
+            <input type="text" id="paciente" placeholder="Nombre completo del paciente">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div class="form-group">
-                <label>Diagnóstico</label>
+                <label>Diagnóstico Metabólico</label>
                 <select id="diagnostico">
-                    <option value="riesgo">Riesgo Metabólico</option>
+                    <option value="riesgo">Riesgo (Obesi./HTA)</option>
                     <option value="prediabetes">Prediabetes</option>
                     <option value="dm2">Diabetes Tipo 2</option>
                 </select>
@@ -75,7 +72,7 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div class="form-group">
-                <label>Fatiga</label>
+                <label>Nivel de Fatiga</label>
                 <select id="fatiga">
                     <option value="fatiga_baja">Baja</option>
                     <option value="fatiga_media">Media</option>
@@ -91,75 +88,70 @@
                 </select>
             </div>
         </div>
-        
+
         <input type="hidden" id="medicacion" value="ninguna">
         <input type="hidden" id="emocional" value="estable">
 
         <div class="btn-group">
-            <button class="btn-calc" onclick="clasificarEPEF()">GENERAR REPORTE ILUSTRADO</button>
-            <button id="btn-pdf" class="btn-pdf" onclick="generarPDF()">DESCARGAR REPORTE PDF</button>
+            <button class="btn-calc" onclick="clasificarEPEF()">GENERAR INFORME MÉDICO</button>
+            <button id="btn-pdf" class="btn-pdf" onclick="generarPDF()">DESCARGAR PDF PARA EL PACIENTE</button>
         </div>
     </div>
 
-    <div id="resultado">
-        </div>
+    <div id="resultado"></div>
 </div>
 
 <script>
-// Iconos SVG de ejercicios para el PDF
 const icons = {
     fuerza: `<svg viewBox="0 0 64 64" class="ejercicio-img"><path d="M54,42h-4V22h4c1.1,0,2-0.9,2-2v-4c0-1.1-0.9-2-2-2h-8c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h4v20H20V22h4c1.1,0,2-0.9,2-2v-4c0-1.1-0.9-2-2-2h-8c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h4v20h-4c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h8c1.1,0,2-0.9,2-2v-4c0-1.1-0.9-2-2-2h-4V42h24v4h-4c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h8c1.1,0,2-0.9,2-2v-4C56,42.9,55.1,42,54,42z" fill="#27ae60"/></svg>`,
     aerobico: `<svg viewBox="0 0 64 64" class="ejercicio-img"><path d="M41.5,12c2.5,0,4.5-2,4.5-4.5S44,3,41.5,3S37,5,37,7.5S39,12,41.5,12z M32.6,35.7l-4.2-6.5c-0.8-1.2-2.1-2-3.6-2h-6.3c-1.4,0-2.5,1.1-2.5,2.5v11.4h4.4V31.6h2.8l4.2,6.5c0.8,1.2,2.1,2,3.6,2h6.3c1.4,0,2.5-1.1,2.5-2.5V26.2h-4.4V35.7z" fill="#2980b9"/></svg>`,
-    estiramiento: `<svg viewBox="0 0 64 64" class="ejercicio-img"><path d="M52,50H12c-1.1,0-2,0.9-2,2v2c0,1.1,0.9,2,2,2h40c1.1,0,2-0.9,2-2v-2C54,50.9,53.1,50,52,50z M32,10c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S35.3,10,32,10z" fill="#f39c12"/></svg>`
+    movilidad: `<svg viewBox="0 0 64 64" class="ejercicio-img"><path d="M32,10c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S35.3,10,32,10z M52,50H12c-1.1,0-2,0.9-2,2v2c0,1.1,0.9,2,2,2h40c1.1,0,2-0.9,2-2v-2C54,50.9,53.1,50,52,50z" fill="#f39c12"/></svg>`
 };
 
 function clasificarEPEF(){
-    const vals = { riesgo:1, prediabetes:2, dm2:3, no:0, si:3, ninguna:0, metformina:1, otra:2, fatiga_baja:0, fatiga_media:1, fatiga_alta:2, estable:0, ansiedad:1, depresion:2, alta:0, moderada:1, baja:2 };
+    const vals = { riesgo:1, prediabetes:2, dm2:3, no:0, si:3, ninguna:0, fatiga_baja:0, fatiga_media:1, fatiga_alta:2, estable:0, alta:0, moderada:1, baja:2 };
     const pesos = { dx:4, comp:5, med:2, fatiga:2, emocional:2, actividad:3 };
     
     let score = (vals[document.getElementById("diagnostico").value] * pesos.dx) + (vals[document.getElementById("complicaciones").value] * pesos.comp) + (vals[document.getElementById("medicacion").value] * pesos.med) + (vals[document.getElementById("fatiga").value] * pesos.fatiga) + (vals[document.getElementById("emocional").value] * pesos.emocional) + (vals[document.getElementById("actividad").value] * pesos.actividad);
 
-    let e = "", c = "", ejercicios = "";
+    let e = "", c = "", ejHTML = "";
 
-    // Configuración según estadio
     if(score <= 10){
         e="Estadio Ia - Prevención"; c="#27ae60";
-        ejercicios = `
-            <div class="ejercicio-item">${icons.aerobico}<b class="ejercicio-name">Caminata Rápida</b><span class="ejercicio-desc">30 min a ritmo donde pueda hablar pero le cueste cantar.</span></div>
-            <div class="ejercicio-item">${icons.fuerza}<b class="ejercicio-name">Sentadillas</b><span class="ejercicio-desc">3 series de 12 reps. Mejora la captación de glucosa.</span></div>
-        `;
+        ejHTML = `<div class="ejercicio-item">${icons.aerobico}<b>Trote o Caminata</b><br><small>30-40 min continuos.</small></div><div class="ejercicio-item">${icons.fuerza}<b>Sentadillas</b><br><small>3 series de 15 reps.</small></div>`;
     } else if(score <= 18){
         e="Estadio IIb - Prediabetes"; c="#f1c40f";
-        ejercicios = `
-            <div class="ejercicio-item">${icons.fuerza}<b class="ejercicio-name">Flexiones en Pared</b><span class="ejercicio-desc">Fortalece tren superior sin impacto articular alto.</span></div>
-            <div class="ejercicio-item">${icons.estiramiento}<b class="ejercicio-name">Movilidad Activa</b><span class="ejercicio-desc">Rotaciones de tronco y hombros para activar metabolismo.</span></div>
-        `;
+        ejHTML = `<div class="ejercicio-item">${icons.fuerza}<b>Pesos Moderados</b><br><small>Fuerza en brazos y piernas.</small></div><div class="ejercicio-item">${icons.aerobico}<b>Intervalos</b><br><small>2 min rápido / 2 min suave.</small></div>`;
     } else {
-        e="Estadio III/IV - Cuidado Especial"; c="#e67e22";
-        ejercicios = `
-            <div class="ejercicio-item">${icons.aerobico}<b class="ejercicio-name">Caminata Suave</b><span class="ejercicio-desc">Ritmo constante, respiración controlada. Evitar fatiga extrema.</span></div>
-            <div class="ejercicio-item">${icons.estiramiento}<b class="ejercicio-name">Flexibilidad Pies</b><span class="ejercicio-desc">Importante para prevenir problemas circulatorios periféricos.</span></div>
-        `;
+        e="Estadio III/IV - Supervisado"; c="#e67e22";
+        ejHTML = `<div class="ejercicio-item">${icons.movilidad}<b>Movilidad Articular</b><br><small>Evita rigidez en pies y manos.</small></div><div class="ejercicio-item">${icons.aerobico}<b>Caminata Suave</b><br><small>Mantener ritmo conversacional.</small></div>`;
     }
 
     const res = document.getElementById("resultado");
     res.style.display = "block";
     res.innerHTML = `
         <div class="score-header" style="background:${c}">
-            <span style="font-size:0.9rem">Paciente: ${document.getElementById('paciente').value || 'S/N'}</span>
-            <span class="score-val">Puntaje: ${score}</span>
-            <span style="font-weight:bold; text-transform:uppercase">${e}</span>
+            <span style="font-size:0.8rem">PACIENTE: ${document.getElementById('paciente').value.toUpperCase() || 'DOCUMENTO SIN NOMBRE'}</span>
+            <span class="score-val">SCORE EPEF: ${score}</span>
+            <span style="font-weight:bold; letter-spacing:1px;">${e}</span>
         </div>
         
-        <div class="section-title">Recomendaciones de Ejercicio</div>
-        <div class="ejercicios-grid">${ejercicios}</div>
+        <div class="section-title">Guía de Ejercicios Recomendados</div>
+        <div class="ejercicios-grid">${ejHTML}</div>
         
-        <div class="section-title">Notas de Seguridad</div>
-        <ul style="font-size:0.85rem; color:#444">
-            <li>Mantener hidratación constante antes y durante.</li>
-            <li>Si siente mareos o sudor frío, suspenda y consuma un carbohidrato simple.</li>
-            <li>Use calzado deportivo adecuado y revise sus pies después de entrenar.</li>
-        </ul>
+        <div class="instrucciones-box">
+            <h4>📋 Instrucciones de Seguridad para el Paciente</h4>
+            <div class="instrucciones-grid">
+                <div><b>1. Calzado:</b> Use zapatos cómodos y revise sus pies buscando ampollas después de cada sesión.</div>
+                <div><b>2. Hidratación:</b> Tome agua antes, durante y después del ejercicio aunque no tenga sed.</div>
+                <div><b>3. Glucemia:</b> Si siente mareo o sudor frío, deténgase y tome un jugo de fruta inmediatamente.</div>
+                <div><b>4. Frecuencia:</b> Intente realizar esta rutina al menos 5 días a la semana.</div>
+            </div>
+        </div>
+
+        <div style="margin-top:20px; font-size:0.75rem; color:#7f8c8d; text-align:justify; line-height:1.2;">
+            <b>Nota Médica:</b> El score se basa en pesos de riesgo (Diagnóstico x4, Complicaciones x5, Actividad x3). A mayor puntaje, mayor precaución clínica. Este reporte es una guía informativa y no reemplaza el criterio médico directo.
+        </div>
     `;
     
     document.getElementById("btn-pdf").style.display = "block";
@@ -167,14 +159,29 @@ function clasificarEPEF(){
 
 function generarPDF() {
     const elemento = document.getElementById('reporte-final');
+    const btnPdf = document.getElementById('btn-pdf');
+    const btnCalc = document.querySelector('.btn-calc');
+    const formArea = document.getElementById('form-area');
+
+    // Ocultar botones para el PDF
+    btnPdf.style.display = 'none';
+    btnCalc.style.display = 'none';
+    formArea.style.display = 'none';
+
     const opt = {
-        margin: 5,
+        margin: 10,
         filename: `Plan_EPEF_${document.getElementById('paciente').value || 'Paciente'}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 3 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    html2pdf().set(opt).from(elemento).save();
+
+    html2pdf().set(opt).from(elemento).save().then(() => {
+        // Volver a mostrar botones
+        btnPdf.style.display = 'block';
+        btnCalc.style.display = 'block';
+        formArea.style.display = 'block';
+    });
 }
 </script>
 </body>
