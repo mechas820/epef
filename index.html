@@ -3,137 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPEF Pro - Prescripción Biopsicosocial</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        :root { --primary: #2c3e50; --accent: #27ae60; --bg: #f4f7f6; --white: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--primary); padding: 10px; }
-        .container { background: var(--white); max-width: 850px; margin: auto; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        header { text-align: center; border-bottom: 3px solid var(--accent); margin-bottom: 20px; padding-bottom: 10px;}
-        label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #dcdde1; border-radius: 8px; font-size: 0.95rem; margin-bottom: 15px; box-sizing: border-box; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-calc { background: var(--accent); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; }
-        .btn-pdf { background: var(--primary); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; display: none; }
-        
-        #resultado { margin-top: 25px; display: none; }
-        .score-header { text-align: center; padding: 15px; border-radius: 8px; color: white; margin-bottom: 15px; }
-        
-        /* Estilos de las dos secciones */
-        .seccion-pro { background: #f8f9fa; border: 1px solid #2c3e50; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
-        .seccion-paciente { background: #fff; border: 1px solid #27ae60; padding: 15px; border-radius: 8px; }
-        
-        .titulo-seccion { font-weight: bold; text-transform: uppercase; border-bottom: 2px solid; margin-bottom: 10px; padding-bottom: 5px; }
-        .pro-title { color: #2c3e50; border-color: #2c3e50; }
-        .pac-title { color: #27ae60; border-color: #27ae60; }
+    <title>CorFiterapia | Especialización en Fisioterapia</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-        .ejercicios-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .ejercicio-item { border: 1px solid #eee; padding: 10px; border-radius: 8px; text-align: center; font-size: 0.85rem; }
-        .ejercicio-img { width: 45px; height: 45px; margin-bottom: 5px; }
-        
-        .mental-box { background: #fff3cd; border-left: 5px solid #ffc107; padding: 10px; margin: 10px 0; font-size: 0.85rem; }
+    <style>
+        :root {
+            --azul: #0a3d62;
+            --rojo: #b71c1c;
+            --gris: #f4f7f9;
+            --oscuro: #0a192f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; color: #333; scroll-behavior: smooth; line-height: 1.6; }
+
+        /* HEADER */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 12px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        .nav-logo-img { height: 55px; width: auto; }
+        nav a { text-decoration: none; color: var(--azul); font-weight: 700; margin-left: 20px; font-size: 11px; text-transform: uppercase; transition: 0.3s; }
+        nav a:hover { color: var(--rojo); }
+
+        /* HERO - LOGO GRANDE */
+        .hero {
+            height: 85vh;
+            background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%;
+        }
+        .hero-logo-main { max-width: 500px; width: 85%; margin-bottom: 25px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); }
+        .hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(20px, 4vw, 32px); color: var(--azul); letter-spacing: 2px; }
+
+        /* INSCRIPCIÓN */
+        .registration-box {
+            max-width: 1000px; margin: -80px auto 60px; background: white; padding: 40px;
+            border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); position: relative; z-index: 10;
+        }
+        .registration-box h3 { text-align: center; color: var(--azul); font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 25px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
+        input, select { padding: 15px; border: 1px solid #ddd; border-radius: 10px; font-family: 'Montserrat'; width: 100%; }
+
+        /* CURSOS */
+        section { padding: 80px 8%; }
+        .st-title { text-align: center; margin-bottom: 50px; }
+        .st-title h2 { font-family: 'Playfair Display', serif; font-size: 38px; color: var(--azul); }
+        .linea { width: 50px; height: 4px; background: var(--rojo); margin: 15px auto; }
+
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .c-card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; display: flex; flex-direction: column; }
+        .c-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .c-img { width: 100%; height: 200px; object-fit: cover; }
+        .c-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .c-info h4 { font-family: 'Playfair Display', serif; color: var(--azul); font-size: 18px; margin-bottom: 12px; height: 45px; overflow: hidden; }
+        .c-info p { font-size: 13px; color: #666; margin-bottom: 15px; flex-grow: 1; }
+        .c-price { color: var(--rojo); font-weight: 800; font-size: 22px; margin-bottom: 15px; }
+        .c-btn { background: var(--azul); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: 700; text-transform: uppercase; width: 100%; transition: 0.3s; }
+        .c-btn:hover { background: var(--rojo); }
+
+        /* IDENTIDAD */
+        .identity-section { background-color: var(--gris); }
+        .identity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .i-card { background: white; padding: 40px 25px; border-radius: 20px; text-align: center; }
+        .i-card i { font-size: 40px; color: var(--rojo); margin-bottom: 15px; }
+
+        /* TESTIMONIO */
+        .t-card { max-width: 800px; margin: 0 auto; padding: 35px; background: white; border-left: 6px solid var(--azul); font-style: italic; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+        /* WA FLOAT */
+        .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 2000; box-shadow: 0 10px 20px rgba(0,0,0,0.2); text-decoration: none; }
+
+        footer { background: var(--oscuro); color: white; text-align: center; padding: 60px 5%; }
+        @media (max-width: 768px) { nav { display: none; } .registration-box { margin: -40px 5% 40px; } }
     </style>
 </head>
 <body>
 
-<div class="container" id="reporte-final">
-    <header>
-        <h2 style="margin:0;">Sistema EPEF Pro</h2>
-        <p style="color: #7f8c8d; margin:0; font-size: 0.85rem;">Prescripción Dual: Clínica y Pedagógica</p>
-    </header>
-    
-    <div id="form-area">
-        <label>Nombre del Paciente</label>
-        <input type="text" id="paciente" placeholder="Ej: Juan Pérez">
+<a href="https://wa.me/573145613371" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-        <div class="grid-2">
-            <div><label>Diagnóstico</label>
-            <select id="diagnostico"><option value="riesgo">Riesgo Metabólico</option><option value="prediabetes">Prediabetes</option><option value="dm2">Diabetes Tipo 2</option></select></div>
-            <div><label>Complicaciones</label>
-            <select id="complicaciones"><option value="no">Sin Complicaciones</option><option value="si">Con Complicaciones (Vasculares)</option></select></div>
-        </div>
-
-        <div class="grid-2">
-            <div><label>Medicación</label>
-            <select id="medicacion"><option value="ninguna">Ninguna</option><option value="metformina">Metformina</option><option value="otra">Insulina / Secretagogos</option></select></div>
-            <div><label>Estado Emocional</label>
-            <select id="emocional"><option value="estable">Estable</option><option value="ansiedad">Ansiedad/Estrés</option><option value="depresion">Sint. Depresivos</option></select></div>
-        </div>
-
-        <div class="grid-2">
-            <div><label>Fatiga</label>
-            <select id="fatiga"><option value="fatiga_baja">Baja</option><option value="fatiga_media">Media</option><option value="fatiga_alta">Alta</option></select></div>
-            <div><label>Actividad Física</label>
-            <select id="actividad"><option value="alta">Activo</option><option value="moderada">Moderado</option><option value="baja">Sedentario</option></select></div>
-        </div>
-
-        <button class="btn-calc" onclick="clasificarEPEF()">GENERAR PRESCRIPCIÓN DUAL</button>
-        <button id="btn-pdf" class="btn-pdf" onclick="generarPDF()">DESCARGAR REPORTE PROFESIONAL</button>
+<header>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <img src="Logo%20CorFiterapia%20_Trasparente.png" alt="Logo" class="nav-logo-img">
+        <span style="font-weight:800; color:var(--azul); font-size:16px;">CORFITERAPIA</span>
     </div>
+    <nav>
+        <a href="#inicio">Inicio</a>
+        <a href="#cursos">Cursos</a>
+        <a href="#identidad">Identidad</a>
+        <a href="#testimonios">Testimonios</a>
+    </nav>
+</header>
 
-    <div id="resultado"></div>
+<section class="hero" id="inicio">
+    <img src="Logo%20CorFiterapia%20_Trasparente.png" alt="CorFiterapia Logo" class="hero-logo-main">
+    <h2>Movimiento que transforma salud</h2>
+</section>
+
+<div class="registration-box">
+    <h3>Inscripción Obligatoria 2026</h3>
+    <form id="mainForm" action="https://formspree.io/f/corfiterapiasredes@gmail.com" method="POST">
+        <div class="form-grid">
+            <input type="text" name="Nombre" id="n_est" placeholder="Nombres y Apellidos" required>
+            <input type="text" name="Cedula" id="d_est" placeholder="Cédula de Ciudadanía" required>
+            <select name="Perfil" id="p_est" required>
+                <option value="">Selecciona tu Perfil</option>
+                <option value="Fisioterapeuta">Fisioterapeuta</option>
+                <option value="Estudiante">Estudiante</option>
+                <option value="SST">Profesional SST</option>
+                <option value="Otro">Otro</option>
+            </select>
+        </div>
+        <input type="hidden" name="Curso_Interes" id="h_curso">
+    </form>
 </div>
 
+<section id="cursos">
+    <div class="st-title">
+        <h2>Programas de Formación</h2>
+        <div class="linea"></div>
+    </div>
+
+    <div class="courses-grid">
+        <div class="c-card">
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800" class="c-img">
+            <div class="c-info">
+                <h4>Prevención de lesiones musculoesqueleticas y riesgo biomecanico</h4>
+                <p>Abordaje integral para la gestión de riesgos en entornos laborales y prevención clínica.</p>
+                <span class="c-price">$650.000 COP</span>
+                <button class="c-btn" onclick="inscribir('https://mpago.li/2FQAbTv', 'Prevención Lesiones y Biomecánico')">Inscribirme</button>
+            </div>
+        </div>
+
+        <div class="c-card">
+            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800" class="c-img">
+            <div class="c-info">
+                <h4>Farmacologia aplicada da la fisioterapia</h4>
+                <p>Estudio de la interacción de fármacos en los procesos de rehabilitación física moderna.</p>
+                <span class="c-price">$1.500.000 COP</span>
+                <button class="c-btn" onclick="inscribir('https://mpago.li/2YNW5Ay', 'Farmacología Aplicada')">Inscribirme</button>
+            </div>
+        </div>
+
+        <div class="c-card">
+            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800" class="c-img">
+            <div class="c-info">
+                <h4>Diplomado en Prescripción</h4>
+                <p>Certificación en dosificación científica del ejercicio para poblaciones con patología.</p>
+                <span class="c-price">$1.200.000 COP</span>
+                <button class="c-btn" onclick="inscribir('https://mpago.li/11GiaS8', 'Diplomado Prescripción')">Inscribirme</button>
+            </div>
+        </div>
+
+        <div class="c-card">
+            <img src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&w=800" class="c-img">
+            <div class="c-info">
+                <h4>Curso basico de rehabilitacion cardiopulmonar</h4>
+                <p>Fundamentos y maniobras esenciales para el manejo de pacientes cardiopulmonares.</p>
+                <span class="c-price">$450.000 COP</span>
+                <button class="c-btn" onclick="inscribir('https://mpago.li/23fNZDp', 'Básico Cardiopulmonar')">Inscribirme</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="identidad" class="identity-section">
+    <div class="st-title">
+        <h2>Nuestra Identidad</h2>
+        <div class="linea"></div>
+    </div>
+    <div class="identity-grid">
+        <div class="i-card">
+            <i class="fas fa-bullseye"></i>
+            <h3>Misión</h3>
+            <p>Brindar formación académica de alta calidad con herramientas científicas para transformar la práctica clínica.</p>
+        </div>
+        <div class="i-card">
+            <i class="fas fa-eye"></i>
+            <h3>Visión</h3>
+            <p>Ser para el 2030 la corporación líder en formación de fisioterapia en Latinoamérica.</p>
+        </div>
+        <div class="i-card">
+            <i class="fas fa-star"></i>
+            <h3>Valores</h3>
+            <p>Excelencia, Ética, Innovación y Rigor Científico en cada proceso educativo.</p>
+        </div>
+    </div>
+</section>
+
+<section id="testimonios">
+    <div class="st-title">
+        <h2>Testimonios</h2>
+        <div class="linea"></div>
+    </div>
+    <div class="t-card">
+        <p>"Los conocimientos adquiridos en CorFiterapia han elevado mi nivel profesional. La aplicabilidad clínica es inmediata."</p>
+        <p style="margin-top:15px; font-weight:800; color:var(--azul);">— Dra. Andrea Restrepo, Fisioterapeuta</p>
+    </div>
+</section>
+
+<footer>
+    <img src="Logo%20CorFiterapia%20_Trasparente.png" alt="Logo" style="height: 80px; filter: brightness(0) invert(1); margin-bottom: 20px;">
+    <p>© 2026 Corporación Actividad Física y Fisioterapia | Colombia</p>
+</footer>
+
 <script>
-const icons = {
-    fuerza: `<svg viewBox="0 0 64 64" class="ejercicio-img"><path d="M54,42h-4V22h4c1.1,0,2-0.9,2-2v-4c0-1.1-0.9-2-2-2h-8c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h4v20H20V22h4c1.1,0,2-0.9,2-2v-4c0-1.1-0.9-2-2-2h-8c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h4v20h-4c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h8c1.1,0,2-0.9,2-2v-4c0-1.1-0.9-2-2-2h-4V42h24v4h-4c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h8c1.1,0,2-0.9,2-2v-4C56,42.9,55.1,42,54,42z" fill="#2c3e50"/></svg>`,
-    aerobico: `<svg viewBox="0 0 64 64" class="ejercicio-img"><path d="M41.5,12c2.5,0,4.5-2,4.5-4.5S44,3,41.5,3S37,5,37,7.5S39,12,41.5,12z M32.6,35.7l-4.2-6.5c-0.8-1.2-2.1-2-3.6-2h-6.3c-1.4,0-2.5,1.1-2.5,2.5v11.4h4.4V31.6h2.8l4.2,6.5c0.8,1.2,2.1,2,3.6,2h6.3c1.4,0,2.5-1.1,2.5-2.5V26.2h-4.4V35.7z" fill="#2980b9"/></svg>`,
-    movilidad: `<svg viewBox="0 0 64 64" class="ejercicio-img"><path d="M32,10c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S35.3,10,32,10z M52,50H12c-1.1,0-2,0.9-2,2v2c0,1.1,0.9,2,2,2h40c1.1,0,2-0.9,2-2v-2C54,50.9,53.1,50,52,50z" fill="#27ae60"/></svg>`
-};
-
-function clasificarEPEF(){
-    const vals = { riesgo:1, prediabetes:2, dm2:3, no:0, si:3, ninguna:0, metformina:1, otra:2, fatiga_baja:0, fatiga_media:1, fatiga_alta:2, estable:0, ansiedad:1, depresion:2, alta:0, moderada:1, baja:2 };
-    const pesos = { dx:4, comp:5, med:2, fatiga:2, emocional:2, actividad:3 };
-    
-    let score = (vals[document.getElementById("diagnostico").value] * pesos.dx) + (vals[document.getElementById("complicaciones").value] * pesos.comp) + (vals[document.getElementById("medicacion").value] * pesos.med) + (vals[document.getElementById("fatiga").value] * pesos.fatiga) + (vals[document.getElementById("emocional").value] * pesos.emocional) + (vals[document.getElementById("actividad").value] * pesos.actividad);
-
-    let e = "", color = "", proRec = "", pacRec = "", ejHTML = "";
-
-    if(score <= 12){
-        e="Ia - Prevención"; color="#27ae60";
-        proRec = "Intensidad 60-75% VO2max. Enfoque en biogénesis mitocondrial. Fuerza 3 sets de 12-15 reps al 60% 1RM.";
-        pacRec = "Camine a paso rápido 30 min diarios. Haga ejercicios de fuerza para endurecer sus músculos 3 veces por semana.";
-        ejHTML = `<div class="ejercicio-item">${icons.aerobico}<b>Trote Suave</b></div><div class="ejercicio-item">${icons.fuerza}<b>Sentadillas</b></div>`;
-    } else if(score <= 22){
-        e="IIb/IIIc - Manejo Activo"; color="#f39c12";
-        proRec = "Entrenamiento concurrente. Frecuencia cardíaca en zona 2-3. Vigilancia de GLUT4 y respuesta insulínica post-esfuerzo.";
-        pacRec = "Camine 20-30 min. Use bandas elásticas para fortalecer sus brazos y piernas. No se agote demasiado.";
-        ejHTML = `<div class="ejercicio-item">${icons.fuerza}<b>Bandas Elásticas</b></div><div class="ejercicio-item">${icons.aerobico}<b>Caminata</b></div>`;
-    } else {
-        e="IVd - Riesgo Clínico"; color="#c0392b";
-        proRec = "Ejercicio de baja carga metabólica (<3 METs). Evitar maniobra de Valsalva. Monitoreo estricto de presión arterial.";
-        pacRec = "Camine muy suave 10-15 min. Haga estiramientos sentados. Si se siente cansado, deténgase de inmediato.";
-        ejHTML = `<div class="ejercicio-item">${icons.movilidad}<b>Estiramiento</b></div><div class="ejercicio-item">${icons.aerobico}<b>Paseo Lento</b></div>`;
-    }
-
-    document.getElementById("resultado").style.display = "block";
-    document.getElementById("resultado").innerHTML = `
-        <div class="score-header" style="background:${color}">
-            <b>PACIENTE: ${document.getElementById('paciente').value.toUpperCase() || 'S/N'} | SCORE: ${score} | ESTADIO: ${e}</b>
-        </div>
+    async function inscribir(url, curso) {
+        const n = document.getElementById('n_est').value;
+        const d = document.getElementById('d_est').value;
+        const p = document.getElementById('p_est').value;
         
-        <div class="seccion-pro">
-            <div class="titulo-seccion pro-title">1. Prescripción Científica (Uso Profesional)</div>
-            <p><b>FITT-VP:</b> Frecuencia 5-7 días/sem | Intensidad: ${proRec}</p>
-            <p><b>Nota Médica:</b> Estratificación basada en pesos acumulados (Dx4, Comp5). Vigilar balance de glucosa por medicación.</p>
-        </div>
+        if(!n || !d || !p) { 
+            alert("⚠️ Por favor completa tus datos de inscripción arriba antes de proceder al pago."); 
+            window.scrollTo({top: 450, behavior: 'smooth'}); 
+            return; 
+        }
 
-        <div class="seccion-paciente">
-            <div class="titulo-seccion pac-title">2. Plan de Entrenamiento (Para el Paciente)</div>
-            <p><b>Lo que debe hacer:</b> ${pacRec}</p>
-            <div class="ejercicios-grid">${ejHTML}</div>
-            <div class="mental-box"><b>Consejo de Seguridad:</b> Revise sus pies hoy mismo. Use calzado deportivo suave e hidrátese bien.</div>
-        </div>
-    `;
-    document.getElementById("btn-pdf").style.display = "block";
-}
-
-function generarPDF() {
-    const element = document.getElementById('reporte-final');
-    document.getElementById('form-area').style.display = 'none';
-    html2pdf().set({ margin: 10, filename: 'EPEF_Dual_Report.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } })
-    .from(element).save().then(()=> { document.getElementById('form-area').style.display = 'block'; });
-}
+        document.getElementById('h_curso').value = curso;
+        const form = document.getElementById('mainForm');
+        
+        try {
+            await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+            window.location.href = url;
+        } catch (e) { window.location.href = url; }
+    }
 </script>
+
 </body>
 </html>
