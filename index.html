@@ -27,23 +27,19 @@
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.85rem; }
         input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; }
 
-        .test-link { display: inline-block; margin-top: 5px; font-size: 0.75rem; color: var(--clinical); text-decoration: none; font-weight: bold; }
-        .test-link:hover { text-decoration: underline; }
-
-        /* Estilos Paciente */
-        .vital-box { background: #f0fdf4; border: 2px solid #dcfce7; padding: 15px; border-radius: 12px; text-align: center; }
-        .barthel-paciente { display: flex; align-items: center; gap: 15px; padding: 10px; background: #f8fafc; border-radius: 10px; margin-bottom: 10px; }
-        .face-icon { font-size: 2rem; }
-
-        .borg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; margin-top: 20px; }
-        .borg-btn { height: 90px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; background: white; font-weight: 800; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
-        .borg-btn.active { background: var(--clinical); color: white; border-color: var(--primary); }
-
-        .instruction-box { background: #fff7ed; border-left: 5px solid #f97316; padding: 15px; border-radius: 8px; font-size: 0.9rem; margin-top: 15px; }
+        /* Estilos Escalas Desplegables */
+        .escala-container { margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+        .escala-header { background: #f1f5f9; padding: 10px 15px; cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; }
+        .escala-content { display: none; padding: 15px; background: white; }
+        .item-pregunta { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px inset #f1f5f9; }
+        
+        /* Botón Complicaciones Profesional */
+        .btn-comp-pro { background: #c0392b; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 15px; width: 100%; }
 
         .btn-main { background: var(--success); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 1rem; font-weight: 800; width: 100%; cursor: pointer; margin-top: 10px; }
-        #resultado-clinico { display: none; }
         .estadio-header { padding: 15px; border-radius: 10px; color: white; text-align: center; font-weight: 800; font-size: 1.3rem; margin-bottom: 20px; }
+        
+        #timer { font-size: 2rem; font-weight: 900; text-align: center; color: var(--primary); }
     </style>
 </head>
 <body>
@@ -61,178 +57,107 @@
 
     <div id="view-pro">
         <div class="card">
-            <h2><i class="fas fa-microscope"></i> Valoración Clínica</h2>
+            <button class="btn-comp-pro" onclick="alert('⚠️ Alerta Clínica: Complicaciones DM2\n- Microvasculares: Retinopatía, Nefropatía, Neuropatía.\n- Macrovasculares: Cardiopatía, ACV, Vasculopatía.\n- Riesgo alto de Pie Diabético.')">
+                <i class="fas fa-exclamation-triangle"></i> VER COMPLICACIONES CRÓNICAS DM2
+            </button>
+
+            <h2><i class="fas fa-user-md"></i> Datos de la Consulta</h2>
             <div class="grid-input">
                 <div><label>Paciente</label><input type="text" id="p-nombre" placeholder="Nombre completo"></div>
+                <div><label>Edad</label><input type="number" id="p-edad"></div>
                 <div>
-                    <label>Medicación Diabetes</label>
+                    <label>Medicación</label>
                     <select id="p-med">
                         <option value="metformina">Metformina</option>
-                        <option value="sglt2">Inhibidores SGLT2 (Empagliflozina)</option>
-                        <option value="glp1">Análogos GLP-1 (Semaglutida)</option>
                         <option value="insulina">Insulina / Sulfonilureas</option>
-                        <option value="combinado">Terapia Combinada</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Condición Base</label>
-                    <select id="p-base">
-                        <option value="1">Factores de Riesgo</option>
-                        <option value="2">Prediabetes</option>
-                        <option value="3">Diabetes Tipo 2</option>
-                        <option value="4">Diabetes Complicada / Tipo 1</option>
+                        <option value="sglt2">Inhibidores SGLT2</option>
                     </select>
                 </div>
             </div>
 
-            <h2><i class="fas fa-tasks"></i> Batería de Tests</h2>
-            <div class="grid-input">
-                <div>
-                    <label>Barthel (0-100)</label>
-                    <input type="number" id="v-barthel" value="100">
-                    <a href="https://www.hipocampo.org/barthel.asp" target="_blank" class="test-link">Link Test Barthel</a>
-                </div>
-                <div>
-                    <label>GAD-7 (Ansiedad)</label>
-                    <input type="number" id="v-ansiedad" value="0">
-                    <a href="https://www.comunidad.madrid/hospital/henares/file/2945/download?token=C3m7T0_f" target="_blank" class="test-link">Link Test Ansiedad</a>
-                </div>
-                <div>
-                    <label>PHQ-9 (Depresión)</label>
-                    <input type="number" id="v-depresion" value="0">
-                    <a href="https://estudiosdelasalud.org/wp-content/uploads/2021/04/PHQ-9.pdf" target="_blank" class="test-link">Link Test Depresión</a>
-                </div>
-                <div>
-                    <label>Fatiga (Piper/FAS)</label>
-                    <input type="number" id="v-fatiga" value="0">
-                    <a href="https://vsearch.nlm.nih.gov/vivisimo/cgi-bin/query-meta?v:project=medlineplus-spanish&query=fatiga" target="_blank" class="test-link">Info Fatiga</a>
-                </div>
-                <div>
-                    <label>Calidad de Vida (SF-36)</label>
-                    <input type="number" id="v-cv" value="0">
-                    <a href="https://www.ser.es/wp-content/uploads/2015/03/SF36_Cuestionario.pdf" target="_blank" class="test-link">Link SF-36</a>
+            <h2><i class="fas fa-clipboard-list"></i> Valoración por Escalas</h2>
+            
+            <div class="escala-container">
+                <div class="escala-header" onclick="toggleEscala('esc-barthel')"><span>Índice de Barthel (AVD)</span> <span id="val-barthel">Total: 100</span></div>
+                <div id="esc-barthel" class="escala-content">
+                    <div class="item-pregunta">Alimentación: <select class="calc-b" onchange="sumarBarthel()"><option value="10">Independiente (10)</option><option value="5">Necesita ayuda (5)</option><option value="0">Dependiente (0)</option></select></div>
+                    <div class="item-pregunta">Lavado: <select class="calc-b" onchange="sumarBarthel()"><option value="5">Independiente (5)</option><option value="0">Dependiente (0)</option></select></div>
+                    <div class="item-pregunta">Vestirse: <select class="calc-b" onchange="sumarBarthel()"><option value="10">Independiente (10)</option><option value="5">Necesita ayuda (5)</option><option value="0">Dependiente (0)</option></select></div>
+                    <div class="item-pregunta">Deposición: <select class="calc-b" onchange="sumarBarthel()"><option value="10">Continente (10)</option><option value="5">Accidente ocasional (5)</option><option value="0">Incontinente (0)</option></select></div>
+                    <div class="item-pregunta">Micción: <select class="calc-b" onchange="sumarBarthel()"><option value="10">Continente (10)</option><option value="5">Accidente ocasional (5)</option><option value="0">Incontinente (0)</option></select></div>
                 </div>
             </div>
+
+            <div class="escala-container">
+                <div class="escala-header" onclick="toggleEscala('esc-gad')"><span>Ansiedad (GAD-7)</span> <span id="val-gad">Total: 0</span></div>
+                <div id="esc-gad" class="escala-content">
+                    <div class="item-pregunta">Nerviosismo/Ansiedad: <select class="calc-g" onchange="sumarGAD()"><option value="0">Nunca</option><option value="1">Varios días</option><option value="2">Más de la mitad</option><option value="3">Casi diario</option></select></div>
+                    <div class="item-pregunta">Incapacidad para dejar de preocuparse: <select class="calc-g" onchange="sumarGAD()"><option value="0">Nunca</option><option value="1">Varios días</option><option value="2">Más de la mitad</option><option value="3">Casi diario</option></select></div>
+                </div>
+            </div>
+
             <button class="btn-main" onclick="procesarPrescripcion()">GENERAR REPORTE INTEGRAL</button>
         </div>
     </div>
 
-    <div id="view-pac" style="display: none;">
-        <div class="card">
-            <h2><i class="fas fa-user-edit"></i> Registro Diario</h2>
-            <div class="grid-input">
-                <div class="vital-box"><label>Glucosa (mg/dL)</label><input type="number" id="pac-glu"></div>
-                <div class="vital-box"><label>Presión Arterial</label><input type="text" id="pac-pa" placeholder="120/80"></div>
-                <div class="vital-box"><label>Frecuencia Cardíaca</label><input type="number" id="pac-fc" placeholder="LPM"></div>
+    <div id="resultado-clinico" style="display:none;" class="card">
+        <div id="pdf-content">
             </div>
-
-            <h2 style="margin-top:20px;"><i class="fas fa-running"></i> Explicación del Ejercicio</h2>
-            <div class="instruction-box">
-                <strong>¿Cómo realizar tu sesión?</strong>
-                <ul>
-                    <li>Realiza un calentamiento suave de 5 minutos.</li>
-                    <li>Mantén una respiración constante, no contengas el aire.</li>
-                    <li>Si sientes mareo, visión borrosa o sudor frío, <b>detente de inmediato</b>.</li>
-                    <li>Marca tu nivel de fatiga en la escala de abajo cada 10 minutos.</li>
-                </ul>
-            </div>
-
-            <h3 style="margin-top:20px;">Escala de Barthel Visual (Capacidad)</h3>
-            <div class="barthel-paciente"><span class="face-icon">😊</span> <div><strong>Independiente:</strong> Puedo hacer todo solo.</div></div>
-            <div class="barthel-paciente"><span class="face-icon">😐</span> <div><strong>Ayuda leve:</strong> Necesito apoyo en algunas cosas.</div></div>
-            <div class="barthel-paciente"><span class="face-icon">☹️</span> <div><strong>Dependiente:</strong> Necesito que alguien me asista.</div></div>
-
-            <h3 style="margin-top:20px;">Escala de Borg: ¿Qué tanto te cansaste?</h3>
-            <div class="borg-grid" id="borg-ui"></div>
-
-            <div class="grid-input" style="margin-top:25px;">
-                <button class="btn-main" style="background:var(--clinical);" onclick="iniciarCrono()">INICIAR CRONÓMETRO</button>
-                <div style="font-size:2rem; font-weight:900; text-align:center;" id="timer">00:00</div>
-                <button class="btn-main" style="background:var(--danger);" onclick="pararCrono()">TERMINAR SESIÓN</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="resultado-clinico" class="card">
-        <div id="pdf-content"></div>
-        <button class="btn-main" style="background:var(--primary);" onclick="descargarPDF()">DESCARGAR PDF PARA EL ESPECIALISTA</button>
+        <button class="btn-main" style="background:var(--primary);" onclick="descargarPDF()">DESCARGAR REPORTE PROFESIONAL (PDF)</button>
     </div>
 </div>
 
 <script>
-    let timer; let seg = 0;
+    function toggleEscala(id) {
+        const el = document.getElementById(id);
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function sumarBarthel() {
+        let suma = 0;
+        document.querySelectorAll('.calc-b').forEach(s => suma += parseInt(s.value));
+        document.getElementById('val-barthel').innerText = "Total: " + suma;
+        return suma;
+    }
+
+    function sumarGAD() {
+        let suma = 0;
+        document.querySelectorAll('.calc-g').forEach(s => suma += parseInt(s.value));
+        document.getElementById('val-gad').innerText = "Total: " + suma;
+        return suma;
+    }
 
     function switchTab(tab, btn) {
         document.getElementById('view-pro').style.display = tab === 'pro' ? 'block' : 'none';
-        document.getElementById('view-pac').style.display = tab === 'pac' ? 'block' : 'none';
         document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
     }
 
-    const borgContainer = document.getElementById('borg-ui');
-    const emojis = ["😴","😊","🙂","🚶","💪","😰","🥵","🔥","😵","🆘","💀"];
-    for(let i=0; i<=10; i++) {
-        borgContainer.innerHTML += `
-            <button class="borg-btn" onclick="seleccionarBorg(this, ${i})">
-                <span style="font-size:1.5rem">${emojis[i]}</span>
-                <span>${i}</span>
-            </button>`;
-    }
-
-    function seleccionarBorg(btn, val) {
-        document.querySelectorAll('.borg-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    function iniciarCrono() {
-        timer = setInterval(() => {
-            seg++;
-            let m = Math.floor(seg/60).toString().padStart(2,'0');
-            let s = (seg%60).toString().padStart(2,'0');
-            document.getElementById('timer').innerText = `${m}:${s}`;
-        }, 1000);
-    }
-    function pararCrono() { clearInterval(timer); }
-
     function procesarPrescripcion() {
-        const nombre = document.getElementById('p-nombre').value || "PACIENTE";
-        const base = document.getElementById('p-base').value;
+        const nombre = document.getElementById('p-nombre').value || "ANÓNIMO";
+        const barthel = sumarBarthel();
+        const gad = sumarGAD();
         const med = document.getElementById('p-med').value;
-        const barthel = document.getElementById('v-barthel').value;
-        const ansiedad = document.getElementById('v-ansiedad').value;
-        const depresion = document.getElementById('v-depresion').value;
-        
-        let estadio = ""; let color = ""; let fitt = "";
 
-        if (base == "4" || barthel < 60) {
-            estadio = "ESTADIO IV - ALTA COMPLEJIDAD";
-            color = "#c0392b";
-            fitt = "Frecuencia: 2 días/sem. Intensidad: Muy baja. Tiempo: 10-15 min.";
-        } else if (base == "3") {
-            estadio = "ESTADIO III - DIABETES ESTABLE";
-            color = "#8e44ad";
-            fitt = "Frecuencia: 3 días/sem. Intensidad: Moderada. Tiempo: 30 min.";
-        } else {
-            estadio = "ESTADIO I-II - PREVENCIÓN/CONTROL";
-            color = "#27ae60";
-            fitt = "Frecuencia: 5 días/sem. Intensidad: Vigorosa. Tiempo: 45-60 min.";
-        }
+        let riesgo = barthel < 60 ? "ALTO" : "MODERADO";
+        let color = barthel < 60 ? "#c0392b" : "#27ae60";
 
         document.getElementById('resultado-clinico').style.display = "block";
         document.getElementById('pdf-content').innerHTML = `
-            <div class="estadio-header" style="background:${color}">${estadio}</div>
-            <div style="padding:15px; border:1px solid #eee;">
+            <div class="estadio-header" style="background:${color}">REPORTE DE CONSULTA - RIESGO ${riesgo}</div>
+            <div style="padding:20px;">
                 <h3>Paciente: ${nombre}</h3>
-                <p><strong>Esquema Medicación:</strong> ${med.toUpperCase()}</p>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f9f9f9; padding:10px;">
-                    <div>Barthel: ${barthel}/100</div>
-                    <div>Ansiedad (GAD7): ${ansiedad}</div>
-                    <div>Depresión (PHQ9): ${depresion}</div>
-                    <div>Calidad Vida: ${document.getElementById('v-cv').value}</div>
+                <p><strong>Medicación:</strong> ${med.toUpperCase()}</p>
+                <hr>
+                <h4>Resultados de Escalas:</h4>
+                <ul>
+                    <li><strong>Índice de Barthel:</strong> ${barthel}/100 (AVD)</li>
+                    <li><strong>Ansiedad (GAD-7):</strong> ${gad} puntos</li>
+                </ul>
+                <div style="background:#f9f9f9; padding:15px; border-left:5px solid ${color};">
+                    <strong>Sugerencia Clínica:</strong> ${riesgo === 'ALTO' ? 'Priorizar movilidad asistida y control glucémico estricto.' : 'Apto para programa de ejercicio aeróbico moderado.'}
                 </div>
-                <h4 style="color:${color}; margin-top:15px;">Prescripción FITT-VP Automática:</h4>
-                <p>${fitt}</p>
-                <p><em>Nota: Ajustar según monitoreo de glucosa capilar.</em></p>
+                <p style="font-size:0.8rem; margin-top:20px;">Generado por EPEF PRO - ${new Date().toLocaleDateString()}</p>
             </div>
         `;
         window.scrollTo(0, document.body.scrollHeight);
@@ -240,8 +165,16 @@
 
     function descargarPDF() {
         const element = document.getElementById('pdf-content');
-        html2pdf().from(element).save('EPEF_PRO_Reporte.pdf');
+        const opt = {
+            margin: 1,
+            filename: 'Reporte_Consulta_EPEF.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
     }
 </script>
+
 </body>
 </html>
