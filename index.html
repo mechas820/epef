@@ -63,6 +63,12 @@
             gap: 20px;
         }
 
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
         label {
             display: block;
             font-size: 0.8rem;
@@ -99,6 +105,21 @@
             background: var(--primary);
             margin-top: 10px;
         }
+
+        .link-modulo {
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cbd5e0;
+        }
+
+        .link-modulo:hover { background: #e2e8f0; }
 
         /* Borg Interface */
         .borg-container {
@@ -151,20 +172,6 @@
             font-size: 0.7rem;
             margin-right: 5px;
         }
-
-        /* Medicamentos Table */
-        .med-table {
-            width: 100%;
-            font-size: 0.8rem;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        .med-table th, .med-table td {
-            border: 1px solid #cbd5e0;
-            padding: 8px;
-            text-align: left;
-        }
-        .med-table th { background: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -176,6 +183,36 @@
     </header>
 
     <div id="form-area">
+        <div class="section-card" style="background: #f8fafc;">
+            <div class="section-title">Control de Signos Vitales y Enlaces de Consulta</div>
+            <div class="grid-4" style="margin-bottom: 20px;">
+                <div>
+                    <label>Tensión Arterial (mmHg)</label>
+                    <input type="text" id="presion_art" placeholder="Ej: 120/80">
+                </div>
+                <div>
+                    <label>Frecuencia Cardíaca (LPM)</label>
+                    <input type="number" id="fc_reposo" placeholder="En reposo">
+                </div>
+                <div>
+                    <label>Glucosa Capilar (mg/dL)</label>
+                    <input type="number" id="glucosa_val" placeholder="Ej: 110">
+                </div>
+                <div>
+                    <label>HbA1c (%)</label>
+                    <input type="number" step="0.1" id="hba1c_val" placeholder="Ej: 6.5">
+                </div>
+            </div>
+            <label>Links de Referencia / Tests Online:</label>
+            <div style="margin-top: 10px;">
+                <a href="https://www.mdcalc.com/calc/1025/framingham-risk-score-hard-coronary-heart-disease" target="_blank" class="link-modulo">Riesgo Framingham</a>
+                <a href="https://www.mdcalc.com/calc/3915/barthel-index-activities-daily-living-adl" target="_blank" class="link-modulo">Índice Barthel</a>
+                <a href="https://www.mdcalc.com/calc/1729/phq-9-patient-health-questionnaire-9" target="_blank" class="link-modulo">Test PHQ-9 (Depresión)</a>
+                <a href="https://www.mdcalc.com/calc/1727/gad-7-general-anxiety-disorder-7" target="_blank" class="link-modulo">Test GAD-7 (Ansiedad)</a>
+                <a href="https://estilo.es/calculadora-vo2max/" target="_blank" class="link-modulo">Calc. VO2 Máx</a>
+            </div>
+        </div>
+
         <div class="section-card">
             <div class="section-title">Información Clínica</div>
             <div class="grid-3">
@@ -342,6 +379,7 @@
     });
 
     function procesarEPEF() {
+        const paciente = document.getElementById("paciente").value || 'No especificado';
         const d = parseInt(document.getElementById("diagnostico").value);
         const rcv = parseInt(document.getElementById("rcv").value);
         const bar = parseInt(document.getElementById("barthel").value);
@@ -349,6 +387,12 @@
         const f = parseInt(document.getElementById("fatiga").value);
         const b = parseInt(document.getElementById("borg_val").value);
         
+        // Signos Vitales
+        const ta = document.getElementById("presion_art").value || 'N/A';
+        const fc = document.getElementById("fc_reposo").value || 'N/A';
+        const glu = document.getElementById("glucosa_val").value || 'N/A';
+        const hba1c = document.getElementById("hba1c_val").value || 'N/A';
+
         let comps = [];
         document.querySelectorAll('.comp:checked').forEach(c => comps.push(c.value));
 
@@ -383,7 +427,7 @@
             <div style="font-size: 1.2rem; font-weight: bold;">
                 ESTADIO: ${estadio} | SCORE: ${score}
             </div>
-            <div>Paciente: ${document.getElementById("paciente").value || 'No especificado'}</div>
+            <div>Paciente: ${paciente} | TA: ${ta} | FC: ${fc} | Gluc: ${glu} | HbA1c: ${hba1c}%</div>
         `;
 
         let compHTML = comps.map(c => `<span class="complicacion-tag">${c.toUpperCase()}</span>`).join('');
@@ -394,7 +438,6 @@
             <p><strong>Alertas Clínicas:</strong> Riesgo Cardiovascular: ${rcv}. Barthel: ${bar}. Vigilancia de neuropatía en pies.</p>
         `;
 
-        // Lógica de Medicamentos en el Informe
         let medAlert = meds.length > 0 ? meds.join(', ') : "No especificados";
         let hipoRisk = (meds.includes("Sulfonilureas") || meds.includes("Insulina Rápida")) ? 
             "<span style='color:red; font-weight:bold;'>ALTO RIESGO DE HIPOGLUCEMIA PERI-EJERCICIO.</span>" : "Riesgo bajo de hipoglucemia.";
